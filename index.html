@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Profit</title>
+    <link rel="stylesheet" href="bulma.css">
     <style>
         table.result {
             width: 100%;
@@ -15,72 +17,92 @@
         }
     </style>
 </head>
+
 <body>
-    <table>
-        <tr>
-            <td>
-                <label for="initialBalance">Initial Balance</label>
-            </td>
-            <td>
-                <input id="initialBalance" type="number">
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <label for="profit">Profit</label>
-            </td>
-            <td>
-                <input id="profit" type="number"> %
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <label for="count">Count</label>
-            </td>
-            <td>
-                <input id="count" type="number">
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                <input id="run" type="button" value="run">
-            </td>
-        </tr>
-    </table>
-    <div id="app">
-        <table class="result" v-if="model.length">
-            <thead>
-                <th>first balance</th>
-                <th>profit</th>
-                <th>final balance</th>
-            </thead>
-            <tbody>
-                <tr v-for="item in model">
-                    <td>
-                        {{ item.firstBalance }}
-                    </td>
-                    <td>
-                        {{ item.profit }}
-                    </td>
-                    <td>
-                        {{ item.finalBalance }}
-                    </td>
-                </tr>
-            </tbody>
+    <div class="container">
+        <br>
+        <table style="margin: auto">
+            <tr>
+                <td>
+                    <label class="label" for="initialBalance">Initial Balance</label>
+                    <br>
+                </td>
+                <td>&nbsp;&nbsp;&nbsp;</td>
+                <td>
+                    <input class="input" id="initialBalance" type="number">
+                    <br>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label class="label" for="profit">Profit</label>
+                    <br>
+                </td>
+                <td>&nbsp;&nbsp;&nbsp;</td>
+                <td>
+                    <div class="control has-icons-right">
+                        <input class="input" id="profit" type="number">
+                        <span class="icon is-small is-right">%</span>
+                    </div>
+                    <br>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label class="label" for="count">Count</label>
+                    <br>
+                    <td>&nbsp;&nbsp;&nbsp;</td>
+                </td>
+                <td>
+                    <input class="input" id="count" type="number">
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td style="text-align: right">
+                    <input id="run" type="button" value="run" class="button is-primary" style="display: inline-block">
+                </td>
+            </tr>
         </table>
+        <div id="app">
+            <div v-if="model.length">
+                <hr>
+                <table class="table is-striped" style="margin: auto">
+                    <thead>
+                        <th style="width: 200px">first balance</th>
+                        <th style="width: 200px">profit</th>
+                        <th style="width: 200px">final balance</th>
+                    </thead>
+                    <tbody>
+                        <tr v-for="item in model">
+                            <td>
+                                {{ item.firstBalance.toFixed(3) }}
+                            </td>
+                            <td>
+                                {{ item.profit.toFixed(3) }}
+                            </td>
+                            <td>
+                                {{ item.finalBalance.toFixed(3) }}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
+
     <script src="vue.min.js"></script>
     <script>
         var model = {
-            initialBalance: document.getElementById('initialBalance').value || 0,
-            profit: document.getElementById('profit').value || 0,
-            count: document.getElementById('count').value || 0,
+            initialBalance: Number(document.getElementById('initialBalance').value) || 0,
+            profit: Number(document.getElementById('profit').value) || 0,
+            count: Number(document.getElementById('count').value) || 0,
             table: []
         }
 
         function wireup() {
-            document.getElementById('initialBalance').addEventListener('input', function(){
+            document.getElementById('initialBalance').addEventListener('input', function () {
                 model.initialBalance = Number(this.value)
             })
 
@@ -99,7 +121,7 @@
         }
 
         function calcProfit(balance, profit) {
-            return balance * profit/100
+            return balance * profit / 100
         }
 
         function calcFinalBalance(balance, profit) {
@@ -112,7 +134,7 @@
                 return
             var firstBalance = model.initialBalance
 
-            for (var i=0; i < model.count; i++) {
+            for (var i = 0; i < model.count; i++) {
                 var profit = model.profit
                 var finalBalance = calcFinalBalance(firstBalance, profit)
 
@@ -136,4 +158,5 @@
         });
     </script>
 </body>
+
 </html>
