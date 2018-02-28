@@ -9,6 +9,10 @@
         table.result {
             width: 100%;
         }
+
+        body {
+            font-family: monospace;
+        }
     </style>
 </head>
 <body>
@@ -44,6 +48,29 @@
             </td>
         </tr>
     </table>
+    <div id="app">
+        <table class="result" v-if="model.length">
+            <thead>
+                <th>first balance</th>
+                <th>profit</th>
+                <th>final balance</th>
+            </thead>
+            <tbody>
+                <tr v-for="item in model">
+                    <td>
+                        {{ item.firstBalance }}
+                    </td>
+                    <td>
+                        {{ item.profit }}
+                    </td>
+                    <td>
+                        {{ item.finalBalance }}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <script src="vue.min.js"></script>
     <script>
         var model = {
             initialBalance: document.getElementById('initialBalance').value || 0,
@@ -67,7 +94,7 @@
 
             document.getElementById('run').addEventListener('click', function () {
                 makeTableModel()
-                renderTable()
+                app.model = model.table
             })
         }
 
@@ -99,37 +126,14 @@
             }
         }
 
-        function renderTable() {
-            if (window.table) {
-                window.table.remove()
-            }
-            window.table = document.createElement('table')
-
-            table.classList.add('result')
-
-
-            var header = table.createTHead(0);
-            headerRow = header.insertRow(0)
-            var firstBalanceTH = headerRow.insertCell(0)
-            var profitTH = headerRow.insertCell(1)
-            var finalBalanceTH = headerRow.insertCell(2)
-            firstBalanceTH.innerText = 'first balance'
-            profitTH.innerText = 'profit'
-            finalBalanceTH.innerText = 'final balance'
-
-            model.table.forEach(function(elem, i){
-                var row = table.insertRow(i + 1)
-                var firstBalanceCell = row.insertCell(0)
-                var profitCell = row.insertCell(1)
-                var finalBalanceCell = row.insertCell(2)
-                firstBalanceCell.innerText = elem.firstBalance
-                profitCell.innerText = elem.profit
-                finalBalanceCell.innerText = elem.finalBalance
-            })
-            document.body.appendChild(table)
-        }
-
         wireup()
+
+        var app = new Vue({
+            el: '#app',
+            data: {
+                model: []
+            }
+        });
     </script>
 </body>
 </html>
