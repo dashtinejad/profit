@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Profit</title>
+    <style>
+        table.result {
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <table>
+        <tr>
+            <td>
+                <label for="initialBalance">Initial Balance</label>
+            </td>
+            <td>
+                <input id="initialBalance" type="number">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="profit">Profit</label>
+            </td>
+            <td>
+                <input id="profit" type="number"> %
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="count">Count</label>
+            </td>
+            <td>
+                <input id="count" type="number">
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <input id="run" type="button" value="run">
+            </td>
+        </tr>
+    </table>
+    <script>
+        var model = {
+            initialBalance: document.getElementById('initialBalance').value || 0,
+            profit: document.getElementById('profit').value || 0,
+            count: document.getElementById('count').value || 0,
+            table: []
+        }
+
+        function wireup() {
+            document.getElementById('initialBalance').addEventListener('input', function(){
+                model.initialBalance = Number(this.value)
+            })
+
+            document.getElementById('profit').addEventListener('input', function () {
+                model.profit = Number(this.value)
+            })
+
+            document.getElementById('count').addEventListener('input', function () {
+                model.count = Number(this.value)
+            })
+
+            document.getElementById('run').addEventListener('click', function () {
+                makeTableModel()
+                renderTable()
+            })
+        }
+
+        function calcProfit(balance, profit) {
+            return balance * profit/100
+        }
+
+        function calcFinalBalance(balance, profit) {
+            return balance + calcProfit(balance, profit)
+        }
+
+        function makeTableModel() {
+            model.table = []
+            if (model.count < 1)
+                return
+            var firstBalance = model.initialBalance
+
+            for (var i=0; i < model.count; i++) {
+                var profit = model.profit
+                var finalBalance = calcFinalBalance(firstBalance, profit)
+
+                model.table.push({
+                    firstBalance: firstBalance,
+                    profit: calcProfit(firstBalance, profit),
+                    finalBalance: finalBalance
+                })
+
+                firstBalance = finalBalance
+            }
+        }
+
+        function renderTable() {
+            if (window.table) {
+                window.table.remove()
+            }
+            window.table = document.createElement('table')
+
+            table.classList.add('result')
+
+
+            var header = table.createTHead(0);
+            headerRow = header.insertRow(0)
+            var firstBalanceTH = headerRow.insertCell(0)
+            var profitTH = headerRow.insertCell(1)
+            var finalBalanceTH = headerRow.insertCell(2)
+            firstBalanceTH.innerText = 'first balance'
+            profitTH.innerText = 'profit'
+            finalBalanceTH.innerText = 'final balance'
+
+            model.table.forEach(function(elem, i){
+                var row = table.insertRow(i + 1)
+                var firstBalanceCell = row.insertCell(0)
+                var profitCell = row.insertCell(1)
+                var finalBalanceCell = row.insertCell(2)
+                firstBalanceCell.innerText = elem.firstBalance
+                profitCell.innerText = elem.profit
+                finalBalanceCell.innerText = elem.finalBalance
+            })
+            document.body.appendChild(table)
+        }
+
+        wireup()
+    </script>
+</body>
+</html>
